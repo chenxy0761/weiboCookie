@@ -1,5 +1,6 @@
 import json
-
+import os
+from hashlib import md5
 import requests
 import time
 from selenium import webdriver
@@ -144,13 +145,20 @@ class WeiboCookiesGenerator(CookiesGenerator):
                     return result
             except TimeoutException:
                 print('出现验证码，开始识别验证码')
-                yzm = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.loginform_yzm .yzm')))
-                url = yzm.get_attribute('src')
-                cookies = self.browser.get_cookies()
-                cookies_dict = {}
-                for cookie in cookies:
-                    cookies_dict[cookie.get('name')] = cookie.get('value')
-                response = requests.get(url, cookies=cookies_dict)
+                i=1
+                while i <30:
+                    yzm = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.loginform_yzm .yzm')))
+                    url = yzm.get_attribute('src')
+                    cookies = self.browser.get_cookies()
+                    cookies_dict = {}
+                    for cookie in cookies:
+                        cookies_dict[cookie.get('name')] = cookie.get('value')
+                    response = requests.get(url, cookies=cookies_dict)
+                    print("开始存储图片")
+                    self.save_image(response.content)
+                    i+=1
+                    submit = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.loginform_yzm .yzm')))
+                    submit.click()
                 result = self.ydm.identify(stream=response.content)
                 if not result:
                     print('验证码识别失败, 跳过识别')
@@ -165,6 +173,13 @@ class WeiboCookiesGenerator(CookiesGenerator):
         except WebDriverException as e:
             print(e.args)
 
+    def save_image(self,content):
+        file_path = '{0}/pic/{1}.{2}'.format(os.getcwd(), md5(content).hexdigest(), 'jpg')
+        print(file_path)
+        if not os.path.exists(file_path):
+            with open(file_path, 'wb') as f:
+                f.write(content)
+                f.close()
 
 class MWeiboCookiesGenerator(CookiesGenerator):
     def __init__(self, name='weibo', browser_type=DEFAULT_BROWSER):
