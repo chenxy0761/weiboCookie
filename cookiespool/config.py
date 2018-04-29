@@ -1,5 +1,5 @@
 # Redis数据库地址
-REDIS_HOST = ''
+REDIS_HOST = 'localhost'
 
 # Redis端口
 REDIS_PORT = 6379
@@ -12,8 +12,8 @@ REDIS_DOMAIN = '*'
 REDIS_NAME = '*'
 
 # 云打码相关配置到yundama.com申请注册
-YUNDAMA_USERNAME = ''
-YUNDAMA_PASSWORD = ''
+YUNDAMA_USERNAME = 'chenxy0761'
+YUNDAMA_PASSWORD = 'ccc331413047'
 YUNDAMA_APP_ID = '3372'
 YUNDAMA_APP_KEY = '1b586a30bfda5c7fa71c881075ba49d0'
 
@@ -23,7 +23,7 @@ YUNDAMA_API_URL = 'http://api.yundama.com/api.php'
 YUNDAMA_MAX_RETRY = 20
 
 # 产生器默认使用的浏览器
-DEFAULT_BROWSER = 'Chrome'
+DEFAULT_BROWSER = 'Firefox'
 
 # 产生器类，如扩展其他站点，请在此配置
 GENERATOR_MAP = {
