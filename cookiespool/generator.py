@@ -40,6 +40,8 @@ class CookiesGenerator(object):
             self.browser.set_window_size(1400, 500)
         elif browser_type == 'Chrome':
             self.browser = webdriver.Chrome()
+        elif browser_type == 'Firefox':
+            self.browser = webdriver.Firefox()
 
     def new_cookies(self, username, password):
         raise NotImplementedError
