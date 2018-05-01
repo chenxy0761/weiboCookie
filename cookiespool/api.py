@@ -36,6 +36,7 @@ def random(name):
     cookies = getattr(g, name + '_cookies').random()
     return cookies
 
+
 @app.route('/<name>/add/<username>/<password>')
 def add(name, username, password):
     """

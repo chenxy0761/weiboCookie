@@ -13,7 +13,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from cookiespool.config import *
 from cookiespool.db import CookiesRedisClient, AccountRedisClient
 from cookiespool.verify import Yundama
-
+from cookiespool.code_REC import codeAPI
 
 class CookiesGenerator(object):
     def __init__(self, name='default', browser_type=DEFAULT_BROWSER):
@@ -145,21 +145,17 @@ class WeiboCookiesGenerator(CookiesGenerator):
                     return result
             except TimeoutException:
                 print('出现验证码，开始识别验证码')
-                i=1
-                while i <30:
-                    yzm = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.loginform_yzm .yzm')))
-                    url = yzm.get_attribute('src')
-                    cookies = self.browser.get_cookies()
-                    cookies_dict = {}
-                    for cookie in cookies:
-                        cookies_dict[cookie.get('name')] = cookie.get('value')
-                    response = requests.get(url, cookies=cookies_dict)
-                    print("开始存储图片")
-                    self.save_image(response.content)
-                    i+=1
-                    submit = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.loginform_yzm .yzm')))
-                    submit.click()
-                result = self.ydm.identify(stream=response.content)
+                yzm = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.loginform_yzm .yzm')))
+                url = yzm.get_attribute('src')
+                cookies = self.browser.get_cookies()
+                cookies_dict = {}
+                for cookie in cookies:
+                    cookies_dict[cookie.get('name')] = cookie.get('value')
+                response = requests.get(url, cookies=cookies_dict)
+                # print("开始存储图片")
+                # self.save_image(response.content)
+                result = codeAPI(response.content)
+                # result = self.ydm.identify(stream=response.content)
                 if not result:
                     print('验证码识别失败, 跳过识别')
                     return

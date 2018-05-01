@@ -91,6 +91,7 @@ class Yundama():
         """
         if stream:
             files = {'file': stream}
+
         elif file:
             files = {'file': open(file, 'rb')}
         else:
